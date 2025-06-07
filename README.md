@@ -1,45 +1,56 @@
-# Performance Comparison of Sequential and Parallel Simulations
-## Parallel Merge Sort Implementation  
+# Parallel and Distributed Merge Sort Implementations
 
-This repository contains implementations of the Merge Sort algorithm using sequential, multiprocessing, and MPI-based parallel approaches.  
+This repository provides multiple implementations of the Merge Sort algorithm with different parallelization approaches, including cluster-level distributed computing using MPI.
 
-### Key Features  
+## Implementations
 
-- **Sequential Merge Sort** (`seqMergesort.py`)  
-  Baseline implementation for performance comparison  
+1. **Sequential Merge Sort** (seqMergesort.py)
+   - Basic recursive implementation serving as performance baseline
 
-- **Multiprocessing Versions**  
-  - Standard Python lists (`seqpar-mergesort.py`)  
-  - NumPy-optimized (`numpy-seqpar-mergesort.py`)  
-  - Supports 2-32 parallel processes  
+2. **Shared-Memory Parallel Versions**:
+   - Standard Python with multiprocessing (seqpar-mergesort.py)
+   - NumPy-optimized version (numpy-seqpar-mergesort.py)
+   - Supports 2-32 parallel processes on a single machine
 
-- **MPI Version** (`MPI-seq-par-mergesort.py`)  
-  - Distributed sorting across multiple nodes  
-  - Uses scatter-gather pattern  
+3. **Distributed MPI Versions**:
+   - Single-node MPI implementation (MPI-seq-par-mergesort.py)
+   - Cluster-ready MPI implementation for multi-node execution
 
-### How to Run  
+## Cluster MPI Execution
 
-1. Sequential/Multiprocessing:  
+To run the MPI version across multiple nodes in a cluster:
+
 ```bash
-python seqpar-mergesort.py
-python numpy-seqpar-mergesort.py
+mpiexec -hostfile hostfile -np <TOTAL_PROCESSES> python MPI-seq-par-mergesort.py
 ```
 
-2. MPI Version (4 processes example):  
-```bash
-mpiexec -n 4 python MPI-seq-par-mergesort.py
+Where `hostfile` contains:
+```
+node1 slots=4
+node2 slots=4
+node3 slots=4
 ```
 
-### Performance Analysis  
+Key MPI features:
+- Uses scatter-gather communication pattern
+- Automatically balances workload across nodes
+- Supports heterogeneous clusters
+- Includes process synchronization
 
-- Benchmarks sorting from 50,000 to 2,000,000 elements  
-- Measures execution time and speed-up  
-- Outputs results to CSV files  
+## Performance Characteristics
 
-### Requirements  
+- Benchmarks from 50,000 to 2,000,000 elements
+- Measures:
+  - Sequential vs parallel execution times
+  - Speedup and efficiency metrics
+  - Strong and weak scaling
+- Outputs CSV results for analysis
 
-- Python 3  
-- mpi4py (for MPI version)  
-- NumPy (for optimized version)  
+## Requirements
 
-The implementations demonstrate how parallel computing can significantly improve sorting performance for large datasets.
+- Python 3.6+
+- mpi4py package (for distributed versions)
+- NumPy (for optimized shared-memory version)
+- MPI runtime (OpenMPI or MPICH)
+
+The implementations demonstrate parallel sorting across the full spectrum from single-machine multicore to distributed cluster environments.
